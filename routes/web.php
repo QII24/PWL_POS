@@ -36,5 +36,24 @@ Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
 
 use App\Http\Controllers\WelcomeController;
 
-Route::get('/', [WelcomeController::class, 'index']);
+
+Route::group(['prefix' => 'user'], function () {
+Route::get('/', [UserController::class, 'index']);
+Route::post('/list', [UserController::class, 'list']);
+// displays the user's home page
+Route::get('/create', [UserController::class, 'create']);
+// display user data in json format for datatables
+Route::post('/', [UserController::class, 'store']);
+// display the add user form page
+Route::get('/{id}', [UserController::class, 'show']); 
+Route::get('/{id}/edit', [UserController::class, 'edit']);
+// save new user data
+// display user details
+Route::put('/{id}', [UserController::class, 'update']);
+// display the user edit form page
+Route::delete('/{id}', [UserController::class, 'destroy']);
+// save user data changes
+// delete user data
+});
+
 
