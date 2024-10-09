@@ -6,6 +6,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -16,7 +17,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/create', [UserController::class, 'create']); // menampilkan halaman form tambah user
     Route::post('/', [UserController::class, 'store']); // menyimpan data user baru
     Route::get('/create_ajax', [UserController::class, 'create_ajax']); // menampilkan halaman form tambah user Ajax
-    Route::post('/ajax', [UserController::class, 'store_ajax']);         // menyimpan data user baru Ajax
+    Route::post('/ajax', [UserController::class, 'store_ajax']); // menyimpan data user baru Ajax
     Route::get('/{id}', [UserController::class, 'show']); // menampilkan detail user
     Route::get('/{id}/edit', [UserController::class, 'edit']); // menampilkan halaman form edit user
     Route::put('/{id}', [UserController::class, 'update']); // menyimpan perubahan data user
@@ -94,3 +95,16 @@ Route::group(['prefix' => 'barang'], function () {
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // untuk hapus data barang Ajax 
     Route::delete('/{id}', [BarangController::class, 'destroy']); // menghapus data barang
 });
+
+// Login, logout, and authentication routes
+Route::pattern('id', '[0-9]+'); // memastikan parameter id adalah angka
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+// Group routes that require authentication
+Route::middleware(['auth'])->group(function () {
+    // Masukkan route yang butuh autentikasi di sini
+});
+
