@@ -39,7 +39,8 @@ class LevelController extends Controller
         // menambahkan kolom index / no urut (default level_nama kolom: DT_RowIndex)
         ->addIndexColumn()
         ->addColumn('aksi', function ($level) { // menambahkan kolom aksi
-            $btn = '<a href="' . url('/level/' . $level->level_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+            $btn =  '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
+            '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';;
             $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
                 '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
             $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
@@ -115,6 +116,21 @@ class LevelController extends Controller
     }
 
     public function show(string $level_id)
+    {
+        $level = levelmodel::find($level_id);
+
+        $breadcrumb = (object)[
+            'title' => 'Detail Level',
+            'list' => ['Home', 'level', 'detail']
+        ];
+        $page = (object)[
+            'title' => 'Detail Level'
+        ];
+        $activeMenu = 'level';
+        return view('level.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
+    }
+
+    public function show_ajax(string $level_id)
     {
         $level = levelmodel::find($level_id);
 

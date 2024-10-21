@@ -43,7 +43,7 @@
 
         var dataKategori;
         $(document).ready(function() {
-            var dataUser = $('#table_user').DataTable({
+            dataKategori = $('#table_user').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -78,7 +78,7 @@
                 }]
             });
             $('#level_id').on('change', function() {
-                dataUser.ajax.reload();
+                dataKategori.ajax.reload();
             });
         });
     </script>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('harga_jual');
             $table->timestamps();
             // Mendefinisikan Foreign Key pada kolom kategori_id mengacu pada kolom level_id di tabel m_level 
-            $table->foreign('kategori_id')->references('kategori_id')->on('m_kategori');
+            $table->foreign('kategori_id')->references('kategori_id')->on('m_kategori')->cascadeOnDelete();
         });    
     }
 

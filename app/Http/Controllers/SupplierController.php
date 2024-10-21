@@ -120,9 +120,21 @@ class SupplierController extends Controller
 
     public function show_ajax(string $id)
     {
+        $breadcrumb = (object)[
+            'title'=>'Detail supplier',
+            'list'=>['Home','supplier','detail']
+        ];
+
+        $page = (object)[
+            'title' => 'detail supplier'
+        ];
         $supplier = SupplierModel::find($id);
-        return view('supplier.show_ajax', ['supplier' => $supplier]);
+
+        $activeMenu = 'supplier';
+        return view('supplier.show_ajax', ['supplier' => $supplier,'page'=>$page,'activeMenu'=>$activeMenu,'breadcrumb'=>$breadcrumb]);
     }
+
+    
 
     public function edit(string $supplier_id){
         $supplier = suppliermodel::find($supplier_id);
@@ -135,6 +147,14 @@ class SupplierController extends Controller
         ];
         $activeMenu = 'supplier';
         return view('supplier.edit',['breadcrumb'=>$breadcrumb,'page'=>$page,'supplier'=>$supplier,'activeMenu'=>$activeMenu]);
+    }
+
+
+    public function edit_ajax($supplier_id)
+    {
+        $supplier = suppliermodel::find($supplier_id);
+
+        return view('supplier.edit_ajax', ['supplier' => $supplier]);
     }
 
     public function update(Request $request, string $supplier_id){
@@ -152,11 +172,7 @@ class SupplierController extends Controller
         return redirect('/supplier')->with('success','Data supplier berhasil diperbarui');
     }
 
-    public function edit_ajax(string $id)
-    {
-        $supplier = SupplierModel::find($id);
-        return view ('supplier.edit_ajax',['supplier' => $supplier]);
-    }
+    
     public function update_ajax(Request $request, $id)
     {
         if ($request->ajax() || $request->wantsJson()) {

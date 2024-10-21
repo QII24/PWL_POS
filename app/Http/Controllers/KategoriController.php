@@ -31,10 +31,10 @@ class KategoriController extends Controller
     public function list(Request $request)
     {
         // Ambil data kategori
-        $kategoris = KategoriModel::select('kategori_id', 'kategori_kode', 'kategori_nama');
+        $kategori= KategoriModel::select('kategori_id', 'kategori_kode', 'kategori_nama');
 
         // Return data untuk DataTables
-        return DataTables::of($kategoris)
+        return DataTables::of($kategori)
             ->addIndexColumn() // menambahkan kolom index / nomor urut
             ->addColumn('aksi', function ($kategori) {
                 // Menambahkan kolom aksi untuk edit, detail, dan hapus
@@ -45,7 +45,7 @@ class KategoriController extends Controller
                 //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 // return $btn;
 
-                $btn = '<a href="' . url('/kategori/' . $kategori->kategori_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                $btn = ' <button  onclick="modalAction(\'' . url('/kategori/' . $kategori->kategori_id. '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/kategori/' . $kategori->kategori_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/kategori/' . $kategori->kategori_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
 
@@ -109,6 +109,24 @@ class KategoriController extends Controller
         $activeMenu = 'kategori'; // set menu yang sedang aktif
 
         return view('kategori.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategori' => $kategori, 'activeMenu' => $activeMenu]);
+    }
+
+    public function show_ajax(string $id)
+    {
+        $kategori = KategoriModel::find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Detail Kategori',
+            'list'  => ['Home', 'Kategori', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail kategori'
+        ];
+
+        $activeMenu = 'kategori'; // set menu yang sedang aktif
+
+        return view('kategori.show_ajax', ['breadcrumb' => $breadcrumb, 'page' => $page, 'kategori' => $kategori, 'activeMenu' => $activeMenu]);
     }
 
     // Menampilkan halaman form edit kategori
@@ -236,7 +254,6 @@ class KategoriController extends Controller
                 ]);
             }
         }
-        return redirect('/');
     }
 
     // 5. public function confirm_ajax(string $id)
@@ -265,7 +282,7 @@ class KategoriController extends Controller
                 ]);
             }
         }
-        return redirect('/');
+        redirect('/');
     }
 
     //Pertemuan 8

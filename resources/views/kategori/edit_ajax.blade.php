@@ -66,8 +66,14 @@
                                     icon: 'success',
                                     title: 'Berhasil',
                                     text: response.message
-                                });
-                                dataKategori.ajax.reload();
+                                }).then(function() {
+                            // Reload halaman atau update data setelah Swal ditutup
+                            if (typeof dataKategori !== 'undefined') {
+                                dataKategori.ajax.reload(); // Reload data table jika ada
+                                console.log('reload')
+                            } else {
+                                location.reload(); // Reload halaman jika tidak ada dataUser
+                            }});
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {

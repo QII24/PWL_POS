@@ -30,6 +30,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <label>Ubah Foto Profil</label><br>
+                        <!-- Foto profil yang akan diubah langsung -->
+                        <img id="current-avatar" src="{{ asset('gambar/' . $user->avatar) }}" class="img-avatar mb-2" alt="Foto Profil Saat Ini" style="width: 100px; height: 100px; object-fit: cover;"><br>
+                        <input type="file" name="avatar" id="avatar"  value="{{ $user->avatar }}" class="form-control" accept="image/*">
+                        <small id="error-avatar" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
                         <label>Level Pengguna</label>
                         <select name="level_id" id="level_id" class="form-control" required>
                             <option value="">- Pilih Level -</option>
@@ -71,36 +78,49 @@
                     level_id: { required: true, number: true },
                     username: { required: true, minlength: 3, maxlength: 20 },
                     nama: { required: true, minlength: 3, maxlength: 100 },
-                    password: { minlength: 6, maxlength: 20 }
+                    password: { minlength: 6, maxlength: 20 },
+                    avatar: { extension: "jpg|jpeg|png"},
                 },
                 submitHandler: function(form) {
-                    $.ajax({
-                        url: form.action,
-                        type: form.method,
-                        data: $(form).serialize(),
-                        success: function(response) {
-                            if(response.status) {
-                                $('#myModal').modal('hide');
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: response.message
-                                });
-                                dataUser.ajax.reload();
+                var formData = new FormData(form); // Gunakan FormData untuk file upload
+                var file_avatar = $("#avatar").prop('files')[0];
+                formData.append('avatar',file_avatar);
+
+             $.ajax({
+                url: form.action,
+                type: form.method,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status) {
+                        // Menampilkan notifikasi berhasil
+                        $('#myModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        }).then(function() {
+                            // Reload halaman atau update data setelah Swal ditutup
+                            if (typeof dataUser !== 'undefined') {
+                                dataUser.ajax.reload(); // Reload data table jika ada
                             } else {
-                                $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Terjadi Kesalahan',
-                                    text: response.message
-                                });
+                                location.reload(); // Reload halaman jika tidak ada dataUser
                             }
-                        }
-                    });
-                    return false;
+                        });
+                    } else {
+                        // Menampilkan error dari validasi field
+                        $('.error-text').text('');
+                        $.each(response.msgField, function(prefix, val) {
+                            $('#error-' + prefix).text(val[0]);
+                        });
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: response.message
+                        });
+                    }
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
@@ -113,7 +133,7 @@
                 unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass('is-invalid');
                 }
-            });
+            })}});
         });
     </script>
 @endempty

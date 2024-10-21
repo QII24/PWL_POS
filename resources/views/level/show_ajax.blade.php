@@ -6,34 +6,29 @@
                         <h3 class="card-title">{{ $page->title }}</h3>
                     </div>
                     <div class="card-body">
-                        @empty($user)
+                        @empty($kategori)
                             <div class="alert alert-danger alert-dismissible">
                                 <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                                 Data yang Anda cari tidak ditemukan.
                             </div>
                         @else
                         <div class="d-flex align-items-start"> <!-- Menggunakan d-flex untuk layout -->
-                            <img src="{{ asset('gambar/' . ($user->avatar ?? 'profil-pic.jpg')) }}" class="img-circle elevation-2 me-4" alt="User Image" width="150" height="150" style="margin-bottom: 20px;">
                             <div>
                                 <div class="d-flex mb-6"> <!-- Menggunakan d-flex untuk membuat baris ID dan Nama -->
                                     <div class="me-4"> <!-- Menambahkan margin ke kanan -->
-                                        <label>ID Pengguna</label>
-                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $user->user_id }}</div>
+                                        <label>ID Level</label>
+                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $level->level_id }}</div>
 
                                     </div>
                                     <div>
-                                        <label>Nama</label>
-                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $user->nama }}</div>
+                                        <label>Level Kode</label>
+                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $level->level_kode }}</div>
                                     </div>
                                 </div>
                                 <div class="d-flex mb-6"> <!-- Menggunakan d-flex untuk membuat baris Level dan Username -->
                                     <div class="me-4"> <!-- Menambahkan margin ke kanan -->
-                                        <label>Level</label>
-                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $user->level->level_nama }}</div>
-                                    </div>
-                                    <div>
-                                        <label>Username</label>
-                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $user->username }}</div>
+                                        <label>Level Nama</label>
+                                        <div class="border rounded p-3" style="min-width: 200px;">{{ $level->level_nama }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +36,7 @@
                         
                         
                         @endempty
-                        <a href="{{ url('user') }}" class="btn btn-sm btn-info">Kembali</a> <!-- Menambahkan margin atas pada tombol -->
+                        <a href="{{ url('level') }}" class="btn btn-sm btn-info">Kembali</a> <!-- Menambahkan margin atas pada tombol -->
                     </div>
                 </div>
 
@@ -83,4 +78,5 @@
 @endpush
 
 @push('js')
+
 @endpush
