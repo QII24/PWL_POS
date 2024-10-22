@@ -58,6 +58,7 @@ class SupplierController extends Controller
         return view('supplier.create',['breadcrumb'=>$breadcrumb,'page'=>$page,'activeMenu'=>$activeMenu,'supplier'=>$supplier]);
     }
 
+
     public function store(Request $request){
         $request->validate([
             'supplier_kode'=>'required|string|min:3|max:5|unique:m_supplier,supplier_kode',
@@ -85,7 +86,8 @@ class SupplierController extends Controller
             $rules = [
                 'supplier_kode' => 'required|string|max:10|unique:m_supplier,supplier_kode',
                 'supplier_nama' => 'required|string|max:100',
-                'supplier_alamat' => 'required|string|max:225'
+                'supplier_alamat' => 'required|string|max:225',
+                'supplier_notlp' => 'required|string|max:200'
             ];
             // use Illuminate\Support\Facades\Validator;
             $validator = Validator::make($request->all(), $rules);

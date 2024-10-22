@@ -87,8 +87,13 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
+                            }).then(function() {
+                                if (typeof dataBarang !== 'undefined') {
+                                    dataBarang.ajax.reload(); // Reload data table jika ada
+                                } else {
+                                    location.reload(); // Reload halaman jika tidak ada dataUser
+                                }
                             });
-                            dataBarang.ajax.reload();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {

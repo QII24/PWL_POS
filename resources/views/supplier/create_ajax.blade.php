@@ -22,6 +22,11 @@
                     <input value="" type="text" name="supplier_alamat" id="supplier_alamat" class="form-control" required>
                     <small id="error-supplier_alamat" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label>Nomer Telpon</label>
+                    <input value="" type="text" name="supplier_notlp" id="supplier_notlp" class="form-control" required>
+                    <small id="error-supplier_alamat" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -62,8 +67,13 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message
-                            });
-                            datasupplier.ajax.reload();
+                            }).then(function() {
+                                if (typeof dataSupplier !== 'undefined') {
+                                    dataSupplier.ajax.reload(); // Reload data table jika ada
+                                } else {
+                                    location.reload(); // Reload halaman jika tidak ada dataUser
+                                }
+                            });;
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
