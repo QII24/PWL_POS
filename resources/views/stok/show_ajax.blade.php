@@ -1,9 +1,9 @@
-@empty($penjualan)
+@empty($stok)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close" data-dismiss="modal" arialabel="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -16,47 +16,46 @@
         </div>
     </div>
 @else
-    <form action="{{ url('/penjualan/' . $penjualan->penjualan_id . '/delete_ajax') }}" method="POST" id="form-delete">
-        @csrf
-        @method('DELETE')
         <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data Penjualan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Data Penjualan</h5>
+                    <button type="button" class="close" data-dismiss="modal" arialabel="Close"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                        Apakah Anda ingin menghapus data seperti di bawah ini?
+                    <div class="alert alert-info">
+                        <h5><i class="icon fas fa-info"></i> Detail Informasi</h5>
                     </div>
                     <table class="table table-sm table-bordered table-striped">
                         <tr>
-                            <th class="text-right col-3">Username:</th>
-                            <td class="col-9">{{ $penjualan->user->username }}</td>
+                            <th class="text-right col-3">NO:</th>
+                            <td class="col-9">{{ $stok->stok_id }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Kode Penjualan :</th>
-                            <td class="col-9">{{ $penjualan->penjualan_kode }}</td>
+                            <th class="text-right col-3">Nama Staff :</th>
+                            <td class="col-9">{{ $stok->user->nama_staff }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Nama Pembeli :</th>
-                            <td class="col-9">{{ $penjualan->pembeli }}</td>
+                            <th class="text-right col-3">Nama Supplier :</th>
+                            <td class="col-9">{{ $stok->supplier->supplier_nama }}</td>
                         </tr>
                         <tr>
-                            <th class="text-right col-3">Tanggal Penjualan :</th>
-                            <td class="col-9">{{ $penjualan->penjualan_tanggal }}</td>
+                            <th class="text-right col-3">Nama Barang :</th>
+                            <td class="col-9">{{ $stok->barang->nama_barang }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Stok Tanggal :</th>
+                            <td class="col-9">{{ $stok->stok_tanggal }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-3">Stok Jumlah :</th>
+                            <td class="col-9">{{ $stok->stok_jumlah }}</td>
                         </tr>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                    <button type="submit" class="btn btn-primary">Ya, Hapus</button>
-                </div>
             </div>
         </div>
-    </form>
     <script>
         $(document).ready(function() {
             $("#form-delete").validate({
@@ -74,7 +73,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                tablePenjualan.ajax.reload();
+                                dataLevel.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {

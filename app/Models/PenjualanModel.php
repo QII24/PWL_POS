@@ -13,7 +13,7 @@ class PenjualanModel extends Model
     protected $table = 't_penjualan';        
     protected $primaryKey = 'penjualan_id'; 
 
-    protected $fillable = ['barang_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal'];
+    protected $fillable = ['user_id','barang_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal'];
 
 
     public function user()
@@ -23,7 +23,7 @@ class PenjualanModel extends Model
 
     public function details()
     {
-        return $this->hasMany(PenjualanDetailModel::class, 'penjualan_id');
+        return $this->hasMany(PenjualanDetailModel::class, 'penjualan_id', 'penjualan_id');
     }
 
 }

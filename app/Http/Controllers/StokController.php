@@ -58,8 +58,7 @@ class StokController extends Controller
                 //     . csrf_field() . method_field('DELETE') .
                 //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 // return $btn;
-
-                $btn = '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/show') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn = '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
 
@@ -144,7 +143,7 @@ class StokController extends Controller
 
     public function show(string $id)
     {
-        $stok = StokModel::with(['supplier', 'barang', 'user'])->find($id); // tambahkan 'barang' dan 'user'
+        $stok = StokModel::with(['supplier', 'barang', 'user'])->find($id)->get(); // tambahkan 'barang' dan 'user'
         if (!$stok) {
             return redirect('/stok')->with('error', 'Data stok tidak ditemukan');
         }
@@ -158,13 +157,20 @@ class StokController extends Controller
     
 
 
-    public function show_ajax(string $id)
+    public function show_ajax( $id)
     {
         $stok = StokModel::with(['supplier', 'barang', 'user'])->find($id);
+        $barang = BarangModel::all();
+        $supplier = SupplierModel::all();
+        $user = UserModel::all();
+
+        return view('stok.show_ajax',compact('stok','barang','supplier','user'));
+
+
         if ($stok) {
             return response()->json([
                 'status' => true,
-                'data' => $stok,
+                'data' => compact('stok','barang','supplier','user'),
             ]);
         } else {
             return response()->json([
@@ -178,7 +184,7 @@ class StokController extends Controller
     
 
     public function edit(string $stok_id){
-        $stok = StokModel::find($stok_id);
+        $stok = StokModel::find($stok_id)->with('user','barang','supplier')->get();
         $breadcrumb = (object)[
             'title'=>'Edit stok',
             'list'=>['Home','stok','edit']
@@ -191,11 +197,14 @@ class StokController extends Controller
     }
 
 
-    public function edit_ajax($stok_id)
+    public function edit_ajax($id)
     {
-        $stok = Stokmodel::find($stok_id);
-
-        return view('stok.edit_ajax', ['stok' => $stok]);
+        $stok = StokModel::with(['supplier', 'barang', 'user'])->find($id);
+        $barang = BarangModel::all();
+        $supplier = SupplierModel::all();
+        $user = UserModel::all();
+        
+        return view('stok.edit_ajax',compact('stok','barang','supplier','user'));
     }
 
     public function update(Request $request, string $stok_id){
@@ -216,7 +225,7 @@ class StokController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'stok_tanggal'=>'required|datetime',
+                'stok_tanggal'=>'required',
                 'stok_jumlah'=>'required|int',
             ];
             
