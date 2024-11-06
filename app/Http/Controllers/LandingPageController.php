@@ -8,6 +8,7 @@ class LandingPageController extends Controller
 {
     public function index()
     {
-        return view('landing.index'); // Pastikan untuk menyesuaikan nama tampilan sesuai dengan file Anda
+        return view('auth.landing');
+        // Pastikan untuk menyesuaikan nama tampilan sesuai dengan file Anda
     }
 }
