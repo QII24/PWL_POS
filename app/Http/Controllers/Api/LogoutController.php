@@ -13,37 +13,15 @@ class LogoutController extends Controller
 {
     public function __invoke(Request $request)
     {
-        try {
-            // Remove token
-            $removeToken = JWTAuth::invalidate(JWTAuth::getToken());
+        //remove token
+        $removeToken = JWTAuth::invalidate(JWTAuth::getToken());
 
-            if ($removeToken) {
-                // Return response JSON
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Logout Successful!',
-                ]);
-            }
-        } catch (TokenExpiredException $e) {
+        if ($removeToken) {
+            //return response JSON
             return response()->json([
-                'success' => false,
-                'message' => 'Token has already expired',
-            ], 401);
-        } catch (TokenInvalidException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Token is invalid',
-            ], 401);
-        } catch (JWTException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Token is not provided',
-            ], 401);
+                'success' => true,
+                'message' => 'Logout Berhasil!',
+            ]);
         }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Logout failed',
-        ], 500);
     }
 }

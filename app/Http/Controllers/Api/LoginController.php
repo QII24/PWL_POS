@@ -10,33 +10,31 @@ class LoginController extends Controller
 {
     public function __invoke(Request $request)
     {
-        // Set validation
+        //set validation
         $validator = Validator::make($request->all(), [
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
-
-        // If validation fails
+//if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        // Get credentials from request
+        
+//get credentials from request
         $credentials = $request->only('username', 'password');
 
-        // If auth fails
-        if (!$token = auth()->guard('api')->attempt($credentials)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Your username or password is incorrect'
-            ], 401);
+//if auth failed
+        if (!$token = auth()->guard('api')->attempt($credentials))
+        {return response()->json([
+            'success' => false,
+            'message' => 'Username atau Password Anda salah',
+        ], 401);
         }
-
-        // If auth succeeds
+//if auth success
         return response()->json([
             'success' => true,
             'user' => auth()->guard('api')->user(),
-            'token' => $token
+            'token' => $token,
         ], 200);
     }
 }
